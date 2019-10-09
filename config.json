@@ -1,0 +1,89 @@
+{
+  "nbNoeuds": 7,
+  "nomSommets": "abcdefg",
+  "nbLieuxRdv": 3,
+  "nomRdv": "bdg",
+  "nomSommetsInitiaux": "de",
+  "arcs": [
+    {
+      "sommetInitial": "a",
+      "sommetTerminal": "b",
+      "duree": 1
+    },
+    {
+      "sommetInitial": "b",
+      "sommetTerminal": "a",
+      "duree": 1
+    },
+    {
+      "sommetInitial": "b",
+      "sommetTerminal": "c",
+      "duree": 1
+    },
+    {
+      "sommetInitial": "c",
+      "sommetTerminal": "b",
+      "duree": 1
+    },
+    {
+      "sommetInitial": "c",
+      "sommetTerminal": "d",
+      "duree": 1
+    },
+    {
+      "sommetInitial": "d",
+      "sommetTerminal": "c",
+      "duree": 1
+    },
+    {
+      "sommetInitial": "c",
+      "sommetTerminal": "f",
+      "duree": 10
+    },
+    {
+      "sommetInitial": "f",
+      "sommetTerminal": "c",
+      "duree": 3
+    },
+    {
+      "sommetInitial": "d",
+      "sommetTerminal": "g",
+      "duree": 10
+    },
+    {
+      "sommetInitial": "g",
+      "sommetTerminal": "d",
+      "duree": 5
+    },
+    {
+      "sommetInitial": "g",
+      "sommetTerminal": "f",
+      "duree": 5
+    },
+    {
+      "sommetInitial": "f",
+      "sommetTerminal": "g",
+      "duree": 3
+    },
+    {
+      "sommetInitial": "f",
+      "sommetTerminal": "e",
+      "duree": 10
+    },
+    {
+      "sommetInitial": "e",
+      "sommetTerminal": "f",
+      "duree": 5
+    },
+    {
+      "sommetInitial": "e",
+      "sommetTerminal": "a",
+      "duree": 1
+    },
+    {
+      "sommetInitial": "a",
+      "sommetTerminal": "e",
+      "duree": 1
+    }
+  ]
+}
