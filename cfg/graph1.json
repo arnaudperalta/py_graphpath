@@ -1,0 +1,29 @@
+{
+  "nbNoeuds": 3,
+  "nomSommets": "abc",
+  "nbLieuxRdv": 1,
+  "nomRdv": "b",
+  "nomSommetsInitiaux": "ac",
+  "arcs": [
+    {
+      "sommetInitial": "a",
+      "sommetTerminal": "b",
+      "duree": 6
+    },
+    {
+      "sommetInitial": "b",
+      "sommetTerminal": "a",
+      "duree": 4
+    },
+    {
+      "sommetInitial": "b",
+      "sommetTerminal": "c",
+      "duree": 3
+    },
+    {
+      "sommetInitial": "c",
+      "sommetTerminal": "b",
+      "duree": 2
+    }
+  ]
+}
