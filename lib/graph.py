@@ -45,7 +45,33 @@ class Graph:
                         elif j == l :
                             mat_pair[i * self.size + j, k * self.size + l] \
                                 = mat[i, k]
-        print(mat_pair)
+        return mat_pair
 
     def rdv_optimal(self):
-        self.transform(self.mat_graph())
+        mat_pcd = self.mat_pcd(self.transform(self.mat_graph()))
+        init = self.pos_sommet(self.sommetsIniList[0])*self.size + self.pos_sommet(self.sommetsIniList[1])
+        rdv = []
+        for c in self.rdvList:
+            rdv.append(self.pos_sommet(c)*self.size + self.pos_sommet(c))
+        res = np.inf
+        fin = np.inf
+        for i in range(len(rdv)):
+            if mat_pcd[init,rdv[i]] < res:
+                res = mat_pcd[init,rdv[i]]
+                fin = i
+        if fin != np.inf:
+            print("le rdv le plus optimal est : " + self.rdvList[fin])
+        else:
+            print("pas de rdv possible")
+
+
+
+    def mat_pcd(self, mat):
+        size_pair = self.size * self.size
+        for i in range(size_pair):
+            mat[i,i] = 0
+        for k in range(size_pair):
+            for i in range(size_pair):
+                for j in range(size_pair):
+                    mat[i,j] = min(mat[i,j],mat[i,k]+mat[k,j])
+        return mat
