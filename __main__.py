@@ -46,7 +46,7 @@ def run_project():
         graph.rdv_optimal()
 
 
-# A decommenter quand l'algo 2 sera implenté
+# A decommenter quand l'algo 2 sera implanté
 # if(algo == 2):
 # graph.ALGO2()
 
