@@ -3,33 +3,33 @@ import json
 from lib.graph import Graph
 
 
-# Import the necessary packages
+def load_config(config):
+    with open('./cfg/' + config, 'r') as fichier:
+        return json.load(fichier)
+
 
 def run_project():
-    config = 'graph1'
-    algo = 0;
-    print("""
-    1. Choisir la config (Defaut : graph1.json)
-    2. Lancer l'algorithme TempsDeParcoursMinimal
-    3. Lancer l'algorithme NombreDeCheminsMinimal
-
-    h pour acceder à l'aide
-    q pour Quitter
-    """)
+    graph = "graph1.json"
+    print("1. Choisir la config (Defaut : graph1.json)")
+    print("2. Lancer l'algorithme TempsDeParcoursMinimal")
+    print("3. Lancer l'algorithme NombreDeCheminsMinimal\n")
+    print("h pour acceder à l'aide")
+    print("q pour Quitter")
     ans = True
     while ans:
         ans = input("")
         if ans == "1":
-            print("Configurations disponibles :\n\n"
-                  "graph1\n"
-                  "graph_sujet\n")
-            ans2 = input("Configuration choisie?\n")
-            config = ans2
+            print("Configurations disponibles :\n")
+            print("graph1.json")
+            print("graph_sujet.json")
+            graph = input("Configuration choisie?\n")
         elif ans == "2":
-            algo = 1
+            graph = Graph(load_config(graph))
+            graph.rdv_optimal()
             ans = None
         elif ans == "3":
-            algo = 2
+            graph = Graph(load_config(graph))
+            graph.rdv_optimal()
             ans = None
         elif ans == "h":
             print("AIDE A COMPLETER\n")
@@ -38,17 +38,6 @@ def run_project():
             ans = None
         else:
             print("Commande non reconnue\n")
-
-    with open('./cfg/' + config + '.json', 'r') as fichier:
-        data = json.load(fichier)
-    graph = Graph(data)
-    if (algo == 1):
-        graph.rdv_optimal()
-
-
-# A decommenter quand l'algo 2 sera implanté
-# if(algo == 2):
-# graph.ALGO2()
 
 
 if __name__ == '__main__':
