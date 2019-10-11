@@ -22,8 +22,8 @@ def run_project():
         if ans == "1":
             print("Configurations disponibles :\n\n"
                   "graph1\n"
-                  "graph_sujet")
-            ans2 = input("Configuration choisie?")
+                  "graph_sujet\n")
+            ans2 = input("Configuration choisie?\n")
             config = ans2
         elif ans == "2":
             algo = 1
@@ -32,12 +32,12 @@ def run_project():
             algo = 2
             ans = None
         elif ans == "h":
-            print("AIDE A COMPLETER")
+            print("AIDE A COMPLETER\n")
         elif ans == "q":
-            print("Fin du programme")
+            print("Fin du programme\n")
             ans = None
         else:
-            print("Commande non reconnue")
+            print("Commande non reconnue\n")
 
     with open('./cfg/' + config + '.json', 'r') as fichier:
         data = json.load(fichier)
