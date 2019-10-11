@@ -2,45 +2,54 @@ import json
 
 from lib.graph import Graph
 
+
 # Import the necessary packages
 
-#Le graph1 est celui utilisé par defaut
-graphe_name = 'graph1'
-
-
 def run_project():
-    with open('./cfg/' + graphe_name + '.json', 'r') as fichier:
+    config = 'graph1'
+    algo = 0;
+    print("""
+    1. Choisir la config (Defaut : graph1.json)
+    2. Lancer l'algorithme TempsDeParcoursMinimal
+    3. Lancer l'algorithme NombreDeCheminsMinimal
+
+    h pour acceder à l'aide
+    q pour Quitter
+    """)
+    ans = True
+    while ans:
+        ans = input("")
+        if ans == "1":
+            print("Configurations disponibles :\n\n"
+                  "graph1\n"
+                  "graph_sujet")
+            ans2 = input("Configuration choisie?")
+            config = ans2
+        elif ans == "2":
+            algo = 1
+            ans = None
+        elif ans == "3":
+            algo = 2
+            ans = None
+        elif ans == "h":
+            print("AIDE A COMPLETER")
+        elif ans == "q":
+            print("Fin du programme")
+            ans = None
+        else:
+            print("Commande non reconnue")
+
+    with open('./cfg/' + config + '.json', 'r') as fichier:
         data = json.load(fichier)
     graph = Graph(data)
-    graph.rdv_optimal()
+    if (algo == 1):
+        graph.rdv_optimal()
+
+
+# A decommenter quand l'algo 2 sera implenté
+# if(algo == 2):
+# graph.ALGO2()
 
 
 if __name__ == '__main__':
-
-    ans = True
-    while ans:
-        print("""
-        1. Lancer le programme
-        2. Choix du graphe
-        3. Aide
-        4. Quitter
-        """)
-        ans = input("Que faire ?")
-        if ans == "1":
-            run_project()
-        elif ans == "2":
-            print("""
-            Graphes disponibles :
-            
-            Graph1
-            Graph_sujet
-            """)
-            ans2 = input("Nom du graphe?")
-            graphe_name = ans2
-        elif ans == "3":
-            print("\n AIDE A COMPLETER")
-        elif ans == "4":
-            print("\n Fin du programme")
-            ans = None
-        else:
-            print("\n Choix non valide, essayez autre chose")
+    run_project()
