@@ -1,6 +1,8 @@
 import json
 
 from lib.graph import Graph
+from os import listdir
+from os.path import isfile, join
 
 
 def load_config(config):
@@ -18,8 +20,9 @@ def print_menu():
 
 def print_menu_config():
     print("Configurations disponibles :\n")
-    print("graph1.json")
-    print("graph_sujet.json")
+    list_cfg = [f for f in listdir('./cfg') if isfile(join('./cfg', f))]
+    for i in range(0, len(list_cfg)):
+        print(list_cfg[i])
 
 
 def run_project():
