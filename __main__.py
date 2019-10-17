@@ -15,7 +15,7 @@ def run_project():
     # Affichage du menu principal
     print_menu(config)
     while True:
-        s = raw_input()
+        s = input()
         for c in s:
             if c == "c":
                 # Affichage du menu de configuration avec recupération du fichier
@@ -28,10 +28,11 @@ def run_project():
             elif c == "h":
                 # Affichage de l'aide
                 print_help()
+            elif c == "m":
+                print_menu(config)
             elif c == "q":
                 # Fin du programme
-                break
-        print_menu(config)
+                exit()
 
 
 # Fonction d'affichage de l'aide
@@ -42,7 +43,8 @@ def print_menu(config):
     print("t : Lancer l'algorithme Point de rendez-vous optimal par le temps")
     print("n : Lancer l'algorithme Point de rendez-vous optimal par les déplacements")
     print("h : pour acceder à l'aide")
-    print("q : spour arrêter le programme.")
+    print("m : pour afficher le menu")
+    print("q : pour arrêter le programme.")
 
 
 # Fonction du système de configuration du programme
@@ -53,7 +55,7 @@ def menu_config():
     for i in range(0, len(list_cfg)):
         print(list_cfg[i])
     while True:
-        config = raw_input("").rstrip()
+        config = input("").rstrip()
         if list_cfg.__contains__(config):
             print("Configuration changée avec succès.")
             break
@@ -77,16 +79,15 @@ def start_algo(g, c):
     if c == "t":
         resultat = g.rdv_optimal()
         if resultat != "":
-            print ("Le point de rendez-vous le plus optimal par le temps est : " + resultat)
+            print("Le point de rendez-vous le plus optimal par le temps est : " + resultat)
         else:
             print("Pas de point de rendez-vous compatible")
     elif c == "n":
         resultat = g.rdv_optimal2()
         if resultat != "":
-            print ("Le point de rendez-vous le plus optimal par les déplacements est : " + resultat)
+            print("Le point de rendez-vous le plus optimal par les déplacements est : " + resultat)
         else:
             print("Pas de point de rendez-vous compatible")
-    print("\n")
 
 
 # Fonction du chargement de la configuration JSON en mémoire

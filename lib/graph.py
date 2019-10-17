@@ -1,10 +1,16 @@
 import numpy.matlib
 import numpy as np
 import sys
-numpy.set_printoptions(threshold=sys.maxsize)
+# numpy.set_printoptions(threshold=sys.maxsize)
 
 
+# Classe Graph:
+# Implémentation d'un modèle de graphe accompagné de méthodes de calculs
+#       pour les deux algorithmes de rendez-vous
 class Graph:
+
+    # Constructeur de la classe Graph, on associe a l'objet le nombre de noeuds, le nom des sommets
+    #       les points de rendez-vous, les sommets initiaux et les arcs du graphe associé à data.
     def __init__(self, data):
         self.size = data["nbNoeuds"]
         self.sommetsList = list(data["nomSommets"])
@@ -17,9 +23,11 @@ class Graph:
         if self.rdvList.__len__() != data["nbLieuxRdv"]:
             self.error = 2
 
+    # Fonction renvoyant un code d'erreur, aucune erreur n'est apparu si cette fonction renvoie 0
     def error(self):
         return self.error
 
+    # Fonction renvoyant la matrice des distances du graphe
     def mat_graph(self):
         mat = np.full((self.size, self.size), np.inf)
         for arc in self.arcs:
@@ -27,13 +35,16 @@ class Graph:
                 , self.pos_sommet(arc["sommetTerminal"])] = arc["duree"]
         return mat
 
+    # Renvoie la position du sommet dans la liste des sommets selon son nom.
     def pos_sommet(self, char):
         return self.sommetsList.index(char)
 
+    # Renvoie une matrice des distances d'un graphe dont les sommets sont paires de sommet
+    #       du graphe initial, et les arcs sont des arcs du graphe initial, reliant deux paires
+    #       ayant un sommet en commun
     def transform(self, mat):
         size_pair = self.size * self.size
         mat_pair = np.full((size_pair, size_pair), np.inf)
-
         for i in range(self.size):
             for j in range(self.size):
                 for k in range(self.size):
