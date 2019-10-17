@@ -51,7 +51,7 @@ def print_menu(config):
 def menu_config():
     config = ""
     print("Configurations disponibles :")
-    list_cfg = [f for f in listdir('./cfg') if isfile(join('./cfg', f))]
+    list_cfg = [f for f in listdir('./cfg') if isfile(join('./cfg', f)) and f.__contains__(".json")]
     for i in range(0, len(list_cfg)):
         print(list_cfg[i])
     while True:
@@ -66,7 +66,29 @@ def menu_config():
 
 # Fonction d'affichage de l'aide
 def print_help():
-    print("AIDE A COMPLETER\n")
+    print("Ce programme vous permet d'exécuter deux algorithmes différents sur des graphes")
+    print("configurés dans des fichiers JSON.")
+    print("Ces graphes représentent une situation entre deux personnes occupant ")
+    print("deux sommets qui cherchent à se rejoindre de manière optimisé.")
+    print("Le premier algorithme priviligit le temps nécessaire pour la rencontre,")
+    print("le second lui, priviligit le nombre de chemins empruntés ")
+    print("nécessaire pour la rencontre.")
+
+    print("La structure de JSON a respecté est la suivante :")
+    print("- nbNoeuds : le nombre de noeuds que comporte le graphe.")
+    print("- nomSommets : le nom de chaque sommet (un nom est composé d'une lettre) ")
+    print("     dans une chaine de caractère.")
+    print("- nbLieuxRdv : le nombre de lieux de rendez vous possible")
+    print("- nomRdv : le nom de chaque lieu de rendez-vous (on indique donc le nom de chaque")
+    print("sommet dans une chaine de caractère).")
+    print("nomSommetsInitiaux : le nom de chaque sommets initiaux (point de départs) écrit")
+    print("dans une chaine de caractère.")
+    print("- arcs : liste de chaque arcs présent dans le graphe respectant la structure suivante :")
+    print("    - sommetInitial : nom du sommet de départ de l'arc")
+    print("    - sommetTerminal : nom du sommet d'arrivé de l'arc")
+    print("    - duree : valeur de l'arc représentant ici le temps émis par une personne pour parcourir")
+    print("        cet arc.")
+    print("Voir cfg/graph_sujet.json pour un exemple.")
 
 
 # Fonction de lancement des deux algorithmes du programme
