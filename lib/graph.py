@@ -1,12 +1,16 @@
 import numpy.matlib
 import numpy as np
 import sys
-numpy.set_printoptions(threshold=sys.maxsize)
+# numpy.set_printoptions(threshold=sys.maxsize)
 
-# Définition de la classe Graph contenant la structure d'un graphe ainsi que des différentes fonctions
-#       permettant les réalistions des deux algorithmes de rendez-vous.
+
+# Classe Graph:
+# Implémentation d'un modèle de graphe accompagné de méthodes de calculs
+#       pour les deux algorithmes de rendez-vous
 class Graph:
-    # Structure du graphe
+
+    # Constructeur de la classe Graph, on associe a l'objet le nombre de noeuds, le nom des sommets
+    #       les points de rendez-vous, les sommets initiaux et les arcs du graphe associé à data.
     def __init__(self, data):
         self.size = data["nbNoeuds"]
         self.sommetsList = list(data["nomSommets"])
@@ -19,6 +23,7 @@ class Graph:
         if self.rdvList.__len__() != data["nbLieuxRdv"]:
             self.error = 2
 
+    # Fonction renvoyant un code d'erreur, aucune erreur n'est apparu si cette fonction renvoie 0
     def error(self):
         return self.error
 
