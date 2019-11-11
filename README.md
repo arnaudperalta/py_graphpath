@@ -1,2 +1,2 @@
 # py_graphpath
-Projet Python de licence 3
+Projet Python 3.7 de licence 3
