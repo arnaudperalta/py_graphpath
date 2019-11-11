@@ -1,7 +1,4 @@
-import numpy.matlib
 import numpy as np
-import sys
-# numpy.set_printoptions(threshold=sys.maxsize)
 
 
 # Classe Graph:
@@ -72,9 +69,6 @@ class Graph:
             if mat_pcd[init, rdv[i]] < res:
                 res = mat_pcd[init, rdv[i]]
                 fin = i
-            if mat_pcd[init, rdv[i]] != np.inf:
-                print("sommet : " + self.rdvList[i])
-                print("distance : " + str(mat_pcd[init, rdv[i]]))
         if fin != np.inf:
             return str(self.rdvList[fin])
         else:
