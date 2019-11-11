@@ -32,13 +32,13 @@ class Graph:
                 , self.pos_sommet(arc["sommetTerminal"])] = arc["duree"]
         return mat
 
-    # Renvoie la position du sommet dans la liste des sommets selon son nom.
+    # Fonction qui renvoie un entier correspondant a un sommet du graphe permettant le parcours des matrices
     def pos_sommet(self, char):
         return self.sommetsList.index(char)
 
-    # Renvoie une matrice des distances d'un graphe dont les sommets sont paires de sommet
-    #       du graphe initial, et les arcs sont des arcs du graphe initial, reliant deux paires
-    #       ayant un sommet en commun
+    # fonction qui renvoie une matrice des distances correspondant  à un graphe qui à pour sommet une paire de
+    #       sommet du graphe initial et pour arcs des arcs du graphe initial tel que pour a,b,i dans S on a :
+    #       (a,b) -> ((a,i),(b,i)) et (a,b) -> ((i,a),(i,b))
     def transform(self, mat):
         size_pair = self.size * self.size
         mat_pair = np.full((size_pair, size_pair), np.inf)
@@ -57,14 +57,20 @@ class Graph:
                                 = mat[i, k]
         return mat_pair
 
+    # fonction du premier algorithme qui détermine le points de rendez-optimal en comparant la plus courte distance
+    #       entre le sommet initial (a,b) (où a et b sont les deux points de départs) et chaque points de rendez-vous
+    #       possible (i,i) (où i figures parmit les points d'arrivés)
     def rdv_optimal(self):
         mat_pcd = self.mat_pcd(self.transform(self.mat_graph()))
+        # sommet inital
         init = self.pos_sommet(self.sommetsIniList[0]) * self.size + self.pos_sommet(self.sommetsIniList[1])
+        # construction d'un tableau contenant les points de rendez-vous possibles
         rdv = []
         for c in self.rdvList:
             rdv.append(self.pos_sommet(c) * self.size + self.pos_sommet(c))
         res = np.inf
         fin = np.inf
+        # recherche de la plus courte distance
         for i in range(len(rdv)):
             if mat_pcd[init, rdv[i]] < res:
                 res = mat_pcd[init, rdv[i]]
@@ -74,6 +80,8 @@ class Graph:
         else:
             return ""
 
+    # fonction  qui prend une matrice des distances en entrée et qui renvoie la matrices des plus courtes distantes
+    #       correspondantes selon l'algorithme de Floyd-Warshall
     def mat_pcd(self, mat):
         size_pair = self.size * self.size
         for i in range(size_pair):
@@ -84,6 +92,8 @@ class Graph:
                     mat[i, j] = min(mat[i, j], mat[i, k]+mat[k, j])
         return mat
 
+    # fonction qui renvoie, en plus de la amtrice des plus courtes distance, la matrice des prédécesseur associé à la
+    #       matrice des distances indiqua en entrée.
     def mat_pcc(self, mat):
         size_pair = self.size * self.size
         for i in range(size_pair):
@@ -102,14 +112,23 @@ class Graph:
                         matpcc[i, j] = k + 1
         return mat, matpcc
 
+    # fonction du deuxième algorithme qui détermine le points de rendez-optimal en comparant le nombre d'étapes pour
+    #       chaque chemin entre le sommet initiale (a,b) (où a et b sont les deux points de départs) et
+    #       chaque points de rendez-vous possible (i,i) (où i figures parmit les points d'arrivés). Si plusieurs
+    #       chemins ont le même nombre d'étapes, on se réfère à la matrice des plus courtes distances pour déterminer
+    #       le point de rendez-vous optimal entre les points de rendez-vous restants.
     def rdv_optimal2(self):
         doublemat = self.mat_pcc(self.transform(self.mat_graph()))
+        # sommet inital
         init = self.pos_sommet(self.sommetsIniList[0]) * self.size + self.pos_sommet(self.sommetsIniList[1])
+        # construction d'un tableau contenant les points de rendez-vous possibles
         rdv = []
         for c in self.rdvList:
             rdv.append(self.pos_sommet(c) * self.size + self.pos_sommet(c))
         res = []
         res2 = []
+        # on détermine le nombre d'étape entre le sommet initial le point de rendez-vous pour chaque
+        #       rendez-vous possible
         for i in range(len(rdv)):
             k = 0
             pos = i
@@ -123,15 +142,16 @@ class Graph:
             res2.append(doublemat[0][init, rdv[i]])
         minimum = np.inf
         candidat = []
+        # on range dans un tableau les points de rendez-vous atteignable en un minimum d'étape
         for i in range(len(res)):
             if res[i] < minimum:
                 candidat.clear()
                 candidat.append(i)
             elif res[i] == minimum:
                 candidat.append(i)
-
         resfinal = candidat[0]
         if len(candidat) > 1:
+            # lorsqu'il y a plusieurs possibilité on se réfère à la matrice des plus courte distances
             minfinal = np.inf
             for k in range(len(candidat)):
                 if res2[candidat[k]] < minfinal:
