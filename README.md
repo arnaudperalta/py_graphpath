@@ -8,7 +8,7 @@ Ce programme se présente sous formes de deux algorithmes :
 - Le premier algorithme doit calculer les trajets les plus courts en terme de temps (la somme des valeurs de chaque arcs empruntés) pour que les deux amis se rejoignent à un point de rendez-vous.
 - Le second algorithme quant à lui doit calculer les plus courts chemins en terme de distance (le nombre d'arcs parcourus).
 
-L'utilisateur a la possibilité de choisir un graphe sur lequel exécuté ces algorithmes, ces graphes doit être écrit dans fichiers JSON dans le dossier cfg selon la structure décrite ci-dessous.
+L'utilisateur a la possibilité de choisir un graphe sur lequel exécuter ces algorithmes, ces graphes doit être écrit dans fichiers JSON dans le dossier cfg selon la structure décrite ci-dessous.
 
 ## Structure de données (JSON)
 
