@@ -1,13 +1,12 @@
+import numpy.matlib
 import numpy as np
+import sys
+numpy.set_printoptions(threshold=sys.maxsize)
 
-
-# Classe Graph:
-# Implémentation d'un modèle de graphe accompagné de méthodes de calculs
-#       pour les deux algorithmes de rendez-vous
+# Définition de la classe Graph contenant la structure d'un graphe ainsi que des différentes fonctions
+#       permettant les réalistions des deux algorithmes de rendez-vous.
 class Graph:
-
-    # Constructeur de la classe Graph, on associe a l'objet le nombre de noeuds, le nom des sommets
-    #       les points de rendez-vous, les sommets initiaux et les arcs du graphe associé à data.
+    # Structure du graphe
     def __init__(self, data):
         self.size = data["nbNoeuds"]
         self.sommetsList = list(data["nomSommets"])
@@ -20,7 +19,19 @@ class Graph:
         if self.rdvList.__len__() != data["nbLieuxRdv"]:
             self.error = 2
 
-    # Fonction renvoyant un code d'erreur, aucune erreur n'est apparu si cette fonction renvoie 0
+        # Ces attributs sont utilisé lors du parcours récursif du graphe dans l'algorithme 2
+        # path conserve le chemin actuel
+        self.path = np.zeros(self.size ** 2)
+        # bool conserve les sommets par lesquels on est déja passé
+        self.bool = np.zeros(self.size ** 2)
+        # target correspont au point de rendez-vous actuellement testé
+        self.target = 0;
+        # min conserve la taille du chemin le plus petit actuellement trouvé
+        self.min = np.inf;
+        # res contient les chemins de taille min
+        self.res = []
+
+
     def error(self):
         return self.error
 
@@ -92,73 +103,86 @@ class Graph:
                     mat[i, j] = min(mat[i, j], mat[i, k]+mat[k, j])
         return mat
 
-    # fonction qui renvoie, en plus de la amtrice des plus courtes distance, la matrice des prédécesseur associé à la
-    #       matrice des distances indiqua en entrée.
-    def mat_pcc(self, mat):
-        size_pair = self.size * self.size
-        for i in range(size_pair):
-            mat[i,i] = 0
-        matpcc = np.full((size_pair, size_pair), 0)
-        for i in range(size_pair):
-            for j in range(size_pair):
-                if i != j and mat[i, j] != np.inf:
-                    matpcc[i, j] = i + 1
-        for k in range(size_pair):
-            for i in range(size_pair):
-                for j in range(size_pair):
-                    av = mat[i, j]
-                    mat[i, j] = min(mat[i, j], mat[i, k]+mat[k, j])
-                    if av != mat[i, j]:
-                        matpcc[i, j] = k + 1
-        return mat, matpcc
 
-    # fonction du deuxième algorithme qui détermine le points de rendez-optimal en comparant le nombre d'étapes pour
-    #       chaque chemin entre le sommet initiale (a,b) (où a et b sont les deux points de départs) et
-    #       chaque points de rendez-vous possible (i,i) (où i figures parmit les points d'arrivés). Si plusieurs
-    #       chemins ont le même nombre d'étapes, on se réfère à la matrice des plus courtes distances pour déterminer
-    #       le point de rendez-vous optimal entre les points de rendez-vous restants.
+    # fonction récursive qui permet de parcourir le graphe en profondeur pour rassembler tout les chemins possible
+    #       entre un point de départ et une cible. La pronfondeur est borné par la longueur d'un chemin minimal déja
+    #       trouvé afin de limiter les appels récursif
+    def explore(self,mat , position, depth):
+        if(depth > self.min):
+            return
+        self.path[depth] = position
+        if(position == self.target ):
+            if (self.min == depth):
+                # Si l'on a déja trouvé un chemin de même taille on sauvegarde aussi le nouveau chemin car il peut avoir
+                #   une durée plus courte
+                self.res.append(np.copy(self.path[0:depth + 1]).astype(int).tolist())
+            if(self.min > depth):
+                # Si l'on trouve un nouveau chemin minimal on écrase notre résultat par ce nouveau chemin
+                #       et on met à jour le nombre d'étape minimale
+                self.min = depth
+                self.res = [np.copy(self.path[0:depth + 1]).astype(int).tolist()]
+            return;
+        # On marque ce sommet car on y est passé une fois
+        self.bool[position] = 1
+        for i in range(self.size ** 2):
+            # Si il n'y a pas d'arc vers le sommet ou qu'on est déja passé par celui-ci on l'ignore
+            if(mat[position][i] == np.inf or self.bool[i] == 1 ):
+                continue
+            # Sinon on explore par ce sommet
+            self.explore(mat, i, depth+1)
+        # on retire la marque
+        self.bool[position] = 0
+        return
+
+    # Fonction qui implémente l'algorithme 2
     def rdv_optimal2(self):
-        doublemat = self.mat_pcc(self.transform(self.mat_graph()))
-        # sommet inital
+        size_pair = self.size * self.size
+        mat = self.transform(self.mat_graph())
+        # Sommet inital
         init = self.pos_sommet(self.sommetsIniList[0]) * self.size + self.pos_sommet(self.sommetsIniList[1])
-        # construction d'un tableau contenant les points de rendez-vous possibles
+        # Construction d'un tableau contenant les points de rendez-vous possibles
         rdv = []
         for c in self.rdvList:
             rdv.append(self.pos_sommet(c) * self.size + self.pos_sommet(c))
-        res = []
-        res2 = []
-        # on détermine le nombre d'étape entre le sommet initial le point de rendez-vous pour chaque
-        #       rendez-vous possible
+        roadres = []
+        sizemin = np.inf
+        # Pour chaque point de rendez-vous on dresse une liste de chemin point de départ -> point de rendez-vous de
+        #       taille minimale. En même temps on conserve la taille du plus petit chemin trouvé dans sizemin
         for i in range(len(rdv)):
-            k = 0
-            pos = i
-            while doublemat[1][init, pos] != 0 and k < (self.size ** 2):
-                pos = doublemat[1][init, pos] - 1
-                ++k
-            if pos == init:
-                res.append(k)
-            else:
-                res.append(np.inf)
-            res2.append(doublemat[0][init, rdv[i]])
-        minimum = np.inf
+            # Avant chaque exploration on réinitialise les variables et on choisit la bonne cible
+            self.bool = np.zeros(self.size ** 2)
+            self.path = np.zeros(self.size ** 2)
+            self.min = np.inf
+            self.target = rdv[i]
+            self.explore(mat , init, 0)
+            if(len(self.res[0]) < sizemin):
+                sizemin = len(self.res[0])
+            roadres.append(self.res)
         candidat = []
-        # on range dans un tableau les points de rendez-vous atteignable en un minimum d'étape
-        for i in range(len(res)):
-            if res[i] < minimum:
-                candidat.clear()
-                candidat.append(i)
-            elif res[i] == minimum:
-                candidat.append(i)
-        resfinal = candidat[0]
-        if len(candidat) > 1:
-            # lorsqu'il y a plusieurs possibilité on se réfère à la matrice des plus courte distances
-            minfinal = np.inf
-            for k in range(len(candidat)):
-                if res2[candidat[k]] < minfinal:
-                    resfinal = candidat[k]
-                    minfinal = res2[candidat[k]]
-        if resfinal != np.inf:
-            return str(self.rdvList[resfinal])
+        # On ne conserve que les points de rendez vous ayant des chemin de tailles minimales
+        for i in range(len(roadres)):
+            if((len(roadres[i][0])) == sizemin):
+                candidat.append(roadres[i])
+        distmin = np.inf
+        resfinal = np.inf
+        # On regarde combien de candidat on obtient
+        if(len(candidat) > 1 ):
+            # Lorsqu'il y a plusieurs candidats on recherche celui qui a le plus court chemin en terme de durée parmi
+            #       ceux de taille minimale
+            for i in range(len(candidat)):
+                dist = 0
+                for u in range(len(candidat[i])):
+                    for j in range(sizemin - 1):
+                        # on calcule la durée du chemin
+                        dist = dist + mat[candidat[i][u][j]][candidat[i][u][j+1]]
+                    if(dist < distmin):
+                        # Si on trouve une nouvelle durée minimale on sauvegarde celle-ci ainsi que le point de
+                        #       rendez-vous qui se trouve à la fin du chemin
+                        resfinal = candidat[i][0][sizemin-1]
+                        distmin = dist
         else:
-            return ""
+            # Si il y a un seul candidat on le récupère en allant cherchez le point de rendez vous qui est le dernier
+            #       des chemins qu'on a sauvegardé
+            resfinal = candidat[0][0][sizemin-1]
+        return str(self.sommetsList[(resfinal//(self.size+1))])
 
