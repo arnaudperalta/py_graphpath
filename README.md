@@ -41,7 +41,7 @@ Le point de rendez-vous le plus optimal par le temps est : b
 
 Affichage lors de l'exécution de l'algorithme Point de rendez-vous optimal par les déplacements:
 
-Le point de rendez-vous le plus optimal par les déplacements est : g
+Le point de rendez-vous le plus optimal par les déplacements est : d
 
 ## Librairies
 - numpy : création de matrice et utilisation des fonctions de calcul matricielle.
