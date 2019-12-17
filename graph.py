@@ -1,7 +1,6 @@
-import numpy.matlib
+# coding: utf-8
 import numpy as np
-import sys
-numpy.set_printoptions(threshold=sys.maxsize)
+
 
 # Définition de la classe Graph contenant la structure d'un graphe ainsi que des différentes fonctions
 #       permettant les réalistions des deux algorithmes de rendez-vous.
@@ -25,12 +24,11 @@ class Graph:
         # bool conserve les sommets par lesquels on est déja passé
         self.bool = np.zeros(self.size ** 2)
         # target correspont au point de rendez-vous actuellement testé
-        self.target = 0;
+        self.target = 0
         # min conserve la taille du chemin le plus petit actuellement trouvé
-        self.min = np.inf;
+        self.min = np.inf
         # res contient les chemins de taille min
         self.res = []
-
 
     def error(self):
         return self.error
@@ -100,36 +98,35 @@ class Graph:
         for k in range(size_pair):
             for i in range(size_pair):
                 for j in range(size_pair):
-                    mat[i, j] = min(mat[i, j], mat[i, k]+mat[k, j])
+                    mat[i, j] = min(mat[i, j], mat[i, k] + mat[k, j])
         return mat
-
 
     # fonction récursive qui permet de parcourir le graphe en profondeur pour rassembler tout les chemins possible
     #       entre un point de départ et une cible. La pronfondeur est borné par la longueur d'un chemin minimal déja
     #       trouvé afin de limiter les appels récursif
-    def explore(self,mat , position, depth):
-        if(depth > self.min):
+    def explore(self, mat, position, depth):
+        if depth > self.min:
             return
         self.path[depth] = position
-        if(position == self.target ):
-            if (self.min == depth):
+        if position == self.target:
+            if self.min == depth:
                 # Si l'on a déja trouvé un chemin de même taille on sauvegarde aussi le nouveau chemin car il peut avoir
                 #   une durée plus courte
                 self.res.append(np.copy(self.path[0:depth + 1]).astype(int).tolist())
-            if(self.min > depth):
+            if self.min > depth:
                 # Si l'on trouve un nouveau chemin minimal on écrase notre résultat par ce nouveau chemin
                 #       et on met à jour le nombre d'étape minimale
                 self.min = depth
                 self.res = [np.copy(self.path[0:depth + 1]).astype(int).tolist()]
-            return;
+            return
         # On marque ce sommet car on y est passé une fois
         self.bool[position] = 1
         for i in range(self.size ** 2):
             # Si il n'y a pas d'arc vers le sommet ou qu'on est déja passé par celui-ci on l'ignore
-            if(mat[position][i] == np.inf or self.bool[i] == 1 ):
+            if mat[position][i] == np.inf or self.bool[i] == 1:
                 continue
             # Sinon on explore par ce sommet
-            self.explore(mat, i, depth+1)
+            self.explore(mat, i, depth + 1)
         # on retire la marque
         self.bool[position] = 0
         return
@@ -154,19 +151,19 @@ class Graph:
             self.path = np.zeros(self.size ** 2)
             self.min = np.inf
             self.target = rdv[i]
-            self.explore(mat , init, 0)
-            if(len(self.res[0]) < sizemin):
+            self.explore(mat, init, 0)
+            if len(self.res[0]) < sizemin:
                 sizemin = len(self.res[0])
             roadres.append(self.res)
         candidat = []
         # On ne conserve que les points de rendez vous ayant des chemin de tailles minimales
         for i in range(len(roadres)):
-            if((len(roadres[i][0])) == sizemin):
+            if (len(roadres[i][0])) == sizemin:
                 candidat.append(roadres[i])
         distmin = np.inf
         resfinal = np.inf
         # On regarde combien de candidat on obtient
-        if(len(candidat) > 1 ):
+        if len(candidat) > 1:
             # Lorsqu'il y a plusieurs candidats on recherche celui qui a le plus court chemin en terme de durée parmi
             #       ceux de taille minimale
             for i in range(len(candidat)):
@@ -174,15 +171,14 @@ class Graph:
                 for u in range(len(candidat[i])):
                     for j in range(sizemin - 1):
                         # on calcule la durée du chemin
-                        dist = dist + mat[candidat[i][u][j]][candidat[i][u][j+1]]
-                    if(dist < distmin):
+                        dist = dist + mat[candidat[i][u][j]][candidat[i][u][j + 1]]
+                    if dist < distmin:
                         # Si on trouve une nouvelle durée minimale on sauvegarde celle-ci ainsi que le point de
                         #       rendez-vous qui se trouve à la fin du chemin
-                        resfinal = candidat[i][0][sizemin-1]
+                        resfinal = candidat[i][0][sizemin - 1]
                         distmin = dist
         else:
             # Si il y a un seul candidat on le récupère en allant cherchez le point de rendez vous qui est le dernier
             #       des chemins qu'on a sauvegardé
-            resfinal = candidat[0][0][sizemin-1]
-        return str(self.sommetsList[(resfinal//(self.size+1))])
-
+            resfinal = candidat[0][0][sizemin - 1]
+        return str(self.sommetsList[(resfinal // (self.size+1))])

@@ -1,6 +1,5 @@
 # coding: utf-8
 import json
-import sys
 
 from graph import Graph
 from os import listdir
@@ -28,10 +27,12 @@ def run_project():
             elif c == "h":
                 # Affichage de l'aide
                 print_help()
+            elif c == "m":
+                # Affichage du menu
+                print_menu(config)
             elif c == "q":
                 # Fin du programme
-                break
-        print_menu(config)
+                return
 
 
 # Fonction d'affichage de l'aide
@@ -42,7 +43,8 @@ def print_menu(config):
     print("t : Lancer l'algorithme Point de rendez-vous optimal par le temps")
     print("n : Lancer l'algorithme Point de rendez-vous optimal par les déplacements")
     print("h : pour acceder à l'aide")
-    print("q : spour arrêter le programme.")
+    print("m : pour afficher le menu")
+    print("q : pour arrêter le programme.")
 
 
 # Fonction du système de configuration du programme
@@ -64,16 +66,23 @@ def menu_config():
 
 # Fonction d'affichage de l'aide
 def print_help():
-    print("AIDE A COMPLETER\n")
+    print("Aide")
+    print("Pour un exemple de la syntaxe de configuration, voir graph_sujet.json")
+    print("Le premier algorithme calcul le point de rendez-vous le plus optimal")
+    print("pour que les deux personnes se rencontrent sur ce point en temps minimum.")
+    print("Le second algorithme calcul le pooint de rendez-vous le plus optimal")
+    print("pour que les deux personnes se rencontrent sur ce point en un nombre")
+    print("de déplacements minimum.")
+    print("Il est possible de saisir plusieurs caractères à la suite dans le menu du programme.")
 
 
 # Fonction de lancement des deux algorithmes du programme
 def start_algo(g, c):
     if g.error != 0:
         if g.error == 1:
-            print("Erreur dans le fichier configuration (nbNoeuds/nomSommets)\n")
+            print("Erreur dans le fichier configuration (nbNoeuds/nomSommets)")
         elif g.error == 2:
-            print("Erreur dans le fichier configuration (nbLieuxRdv/nomRdv)\n")
+            print("Erreur dans le fichier configuration (nbLieuxRdv/nomRdv)")
     if c == "t":
         resultat = g.rdv_optimal()
         if resultat != "":
@@ -86,7 +95,6 @@ def start_algo(g, c):
             print ("Le point de rendez-vous le plus optimal par les déplacements est : " + resultat)
         else:
             print("Pas de point de rendez-vous compatible")
-    print("\n")
 
 
 # Fonction du chargement de la configuration JSON en mémoire
