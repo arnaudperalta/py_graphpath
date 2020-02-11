@@ -1,5 +1,5 @@
 # py_graphpath
-Projet de licence 3 en Python 3.7 portant sur des algorithmes de chemins du plus court chemin dans un graphe.
+Projet de licence 3 en Python 3.7 portant sur des algorithmes de plus court chemin dans un graphe.
 ## Présentation
 La réalisation de ce projet a eu pour objectif d'implémenter en langage Python 3.7 deux algorithmes sur des graphes représentant une situation dans laquelle deux personnes cherchent à se rejoindre.
 
