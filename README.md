@@ -1,5 +1,7 @@
 # py_graphpath
 Projet de licence 3 en Python 3.7 portant sur des algorithmes de plus court chemin dans un graphe.
+
+[![Run on Repl.it](https://repl.it/badge/github/arnaudperalta/py_graphpath)](https://repl.it/github/arnaudperalta/py_graphpath)
 ## Présentation
 La réalisation de ce projet a eu pour objectif d'implémenter en langage Python 3.7 deux algorithmes sur des graphes représentant une situation dans laquelle deux personnes cherchent à se rejoindre.
 
