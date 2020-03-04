@@ -14,7 +14,7 @@ def run_project():
     # Affichage du menu principal
     print_menu(config)
     while True:
-        s = raw_input()
+        s = input()
         for c in s:
             if c == "c":
                 # Affichage du menu de configuration avec recupération du fichier
